@@ -1,0 +1,51 @@
+ARM GAS  main.asm 			page 1
+
+
+   1              			.data
+   2              			.align 4
+   3 0000 24000000 	x_array:	.word		0x24,0x12,0x05,0x66,0x12,0x01,0x08,0x14 
+   3      12000000 
+   3      05000000 
+   3      66000000 
+   3      12000000 
+   4              				
+   5 0020 12000000 	y_array:	.word		0x12,0x33,0x21,0x0A,0x15,0x11,0x25,0x99 
+   5      33000000 
+   5      21000000 
+   5      0A000000 
+   5      15000000 
+   6              	
+   7              	
+   8 0040 00000000 	sum_array:	.space	32
+   8      00000000 
+   8      00000000 
+   8      00000000 
+   8      00000000 
+   9              	
+  10              			.text
+  11              			.global main
+  12              	
+  13 0000 0000A0E1 	main:		nop
+  14 0004 3C009FE5 			ldr		r0, =x_array      @ Load register r0 with the value 5
+  15 0008 3C109FE5 			ldr		r1, =y_array
+  16 000c 3C209FE5 			ldr		r2, =sum_array
+  17 0010 0030A0E3 			mov		r3, #0
+  18              	loop:
+  19 0014 080053E3 			cmp		r3, #8
+  20 0018 080000AA 			bge		stop
+  21 001c 004090E5 			ldr		r4, [r0]		@load content in r0
+  22 0020 005091E5 			ldr		r5, [r1]		@load content in r1
+  23 0024 054084E0 			add		r4, r4,	r5
+  24 0028 004082E5 			str		r4, [r2]
+  25              	
+  26 002c 040080E2 			add		r0, r0, #4
+  27 0030 041081E2 			add		r1, r1, #4
+  28 0034 042082E2 			add		r2, r2, #4
+  29 0038 013083E2 			add		r3, r3, #1
+  30 003c F4FFFFEA 			b		loop
+  31              	stop:	
+  32 0040 0000A0E1 			nop	
+  33 0044 FDFFFFEA 			b		stop
+  33      00000000 
+  33      20000000 
+  33      40000000 
