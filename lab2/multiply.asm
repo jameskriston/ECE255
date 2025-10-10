@@ -14,7 +14,7 @@ main:       nop
         ldr     r1, [r1]
         ldr     r2, = b 
         ldr     r2, [r2]
-        ldr     r3, = result
+       
         mov     r0, #0
         mov     r4, #0
 loop:
@@ -27,6 +27,7 @@ loop:
     
 
 stop:
+        ldr     r3, = result
         str r4, [r3]
         nop
         b       stop
