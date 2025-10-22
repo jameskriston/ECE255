@@ -1,0 +1,59 @@
+   1              	# 1 "../src/main.asm"
+   1              	.data
+   0              	
+   0              	
+   0              	
+   2              		.align 4
+   3 0000 00000000 		stack_Sim_FA: .space 80
+   3      00000000 
+   3      00000000 
+   3      00000000 
+   3      00000000 
+   4              	
+   5              	
+   6              	.text
+   7              	
+   8              	
+   9              		.global main
+  10              		main:
+  11              	//---------  full Ascending stack setup -----------
+  12 0000 0F48     			ldr r0, =stack_Sim_FA   // r0 is the pointer for stack simulation
+  13 0002 0438     			sub r0, #4				// Since it is full stack
+  14 0004 0022     			mov r2, #0				// r2: push or pop
+  15              	
+  16              	
+  17              	//---------- Test --------------------------------
+  18 0006 0522     			mov r2, #5
+  19 0008 FFF7FEFF 			bl stackSim_FA_PUSH
+  20 000c 0A22     			mov r2, #10
+  21 000e FFF7FEFF 		 	bl stackSim_FA_PUSH
+  22 0012 7222     			mov r2,#114
+  23 0014 FFF7FEFF 			bl stackSim_FA_PUSH
+  24 0018 E822     			mov r2,#232
+  25 001a FFF7FEFF 			bl stackSim_FA_PUSH
+  26 001e 5622     			mov r2,#86
+  27 0020 FFF7FEFF 			bl stackSim_FA_PUSH
+  28 0024 1E22     			mov r2,#30
+  29 0026 FFF7FEFF 			bl stackSim_FA_PUSH
+  30 002a FFF7FEFF 			bl stackSim_FA_POP
+  31 002e FFF7FEFF 			bl stackSim_FA_POP
+  32 0032 FFF7FEFF 			bl stackSim_FA_POP
+  33 0036 FFF7FEFF 			bl stackSim_FA_POP
+  34              	
+  35              	
+  36 003a C046     	stop:	nop
+  37 003c FDE7     			b 		stop
+  38 003e 00000000 			.end
+  38      0000
+DEFINED SYMBOLS
+     ../src/main.asm:2      .data:00000000 $d
+     ../src/main.asm:3      .data:00000000 stack_Sim_FA
+     ../src/main.asm:10     .text:00000000 main
+     ../src/main.asm:12     .text:00000000 $t
+     ../src/main.asm:36     .text:0000003a stop
+     ../src/main.asm:38     .text:0000003e $d
+     ../src/main.asm:38     .text:00000040 $d
+
+UNDEFINED SYMBOLS
+stackSim_FA_PUSH
+stackSim_FA_POP

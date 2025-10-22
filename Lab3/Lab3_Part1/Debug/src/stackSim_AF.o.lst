@@ -1,0 +1,40 @@
+   1              	# 1 "../src/stackSim_AF.asm"
+   1              		.text
+   0              	
+   0              	
+   0              	
+   2              		.global	stackSim_AF_PUSH
+   3              		.global	stackSim_AF_POP
+   4              		.func	stackSim_AF_PUSH
+   5              	
+   6              	
+   7              		stackSim_AF_PUSH:
+   8 0000 00B5     			push {lr} //store link register
+   9              	
+  10 0002 0430     			add r0,#4 // increase stack pointer
+  11 0004 0260     			str r2,[r0] // store r2 in simulated stack
+  12              	
+  13              	
+  14 0006 00BD     			pop {pc}	//restore
+  15              		.endfunc
+  16              	
+  17              	
+  18              	
+  19              		.func	stackSim_AF_POP
+  20              		stackSim_AF_POP:
+  21 0008 00B5     			push {lr} //store link register
+  22              	
+  23 000a 0268     			ldr r2,[r0]
+  24 000c 0438     			sub r0,#4
+  25              	
+  26              	
+  27 000e 00BD     			pop {pc}	//restore
+  28              		.endfunc
+  29              	
+  30              		.end
+DEFINED SYMBOLS
+../src/stackSim_AF.asm:7      .text:00000000 stackSim_AF_PUSH
+../src/stackSim_AF.asm:20     .text:00000008 stackSim_AF_POP
+../src/stackSim_AF.asm:8      .text:00000000 $t
+
+NO UNDEFINED SYMBOLS
