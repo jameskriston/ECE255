@@ -18,8 +18,8 @@
 
        num = atoi(argv[1]);
        printf("Computing prime numbers greater than 2 and less than %d\n",num); 
-        int repeats = 10000; //the amount of times to run the algorithm for accurate timing
-        timer_init();
+        int repeats = 1; //the amount of times to run the algorithm for accurate timing
+      timer_init();
         timer_start();
        
                 for (int i = 0; i < repeats; i++){ //loop algorithm1 
@@ -28,13 +28,15 @@
                     double time1 = timer_stop(); //stop timer and store time to do x repeats of algorithm1
         
         timer_init(); //reset timer
-        timer_start();
+        timer_start(); 
                 for (int i = 0; i < repeats; i++){ //loop algorithm2
                     ComputePrimesNew(num);
                 }
                     double time2 = timer_stop(); //stop timer and store time to do x repeats of algorithm2       
        
         printf("Algorithm 1 computing first %d primes greater than 2 (repeated %d times) took %.4f microseconds\n",num,repeats,time1); //print results
-        printf("Algorithm 2 computing first %d primes greater than 2 (repeated %d times) took %.4f microseconds\n",num,repeats,time2);
+        printf("Algorithm 2 computing first %d primes greater than 2 (repeated %d times) took %.3f microseconds\n",num,repeats,time2);
 
     }
+
+
