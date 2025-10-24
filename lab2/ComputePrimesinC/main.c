@@ -26,7 +26,7 @@
                     ComputePrimesOld(num);
                 }
                     double time1 = timer_stop(); //stop timer and store time to do x repeats of algorithm1
-        
+
         timer_init(); //reset timer
         timer_start(); 
                 for (int i = 0; i < repeats; i++){ //loop algorithm2

@@ -50,7 +50,7 @@ void ComputePrimesNew(int num){
             }
         }
         if (prime) { //if number is prime
-           // printf("%d\n",i); //print the prime number
+          
             n++;    //increment count of primes found
           
         }
