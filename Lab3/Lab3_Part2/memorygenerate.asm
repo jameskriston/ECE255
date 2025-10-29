@@ -1,20 +1,15 @@
-.text
-.global main
-.align 2
-.data
-array: .space 150*4
 
-.macro memorygenerate array, size
-   ldr r0, =\array
+.macro memorygenerate dest, size
+   ldr r0, =\dest
     mov r1, #1
 
-    1: STR r1, [r0], #4
-       add r1, r1, #1
-       cmp r1, #\size+1
-       ble 1b
+   loop:
+   cmp r1, #\size
+   bgt stoploop
+   str r1, [r0],#4
+   add r1,r1,#1
+   b loop
+   stoploop:
+   .endm
 
-main:
-    push {lr}	
-    memorygenerate array,150
-    pop {pc}	
 

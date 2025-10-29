@@ -2,8 +2,6 @@
 	.global	stackSim_FA_PUSH
 	.global	stackSim_FA_POP
 	
-	
-
 	.func stackSIM_FA_PUSH
 	stackSim_FA_PUSH:
 		push {lr} //store link register
@@ -24,3 +22,4 @@
 	.endfunc
 
 	.end
+
