@@ -8,9 +8,9 @@
 
     push {lr} //store link register
 
-    add r0,r0,#4 // increase stack pointer
     str r2, [r0] // store r2 in simulated stack
-
+    sub r0,r0,#4 // increase stack pointer
+    
     pop {pc}	//restore
 .endfunc
 
@@ -19,8 +19,10 @@
     stackSim_ED_POP:
 
     push {lr} 
-    ldr r2, [r0]
+    
     add r0, r0, #4
+    ldr r2, [r0]
+
     pop {pc}
 .endfunc
 
