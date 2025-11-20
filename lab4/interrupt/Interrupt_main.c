@@ -2,7 +2,6 @@
 // This file is part of the GNU ARM Eclipse distribution.
 // Copyright (c) 2014 Liviu Ionescu.
 //
-
 // ----------------------------------------------------------------------------
 
 #include <stdio.h>
@@ -15,53 +14,46 @@
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
-volatile int EXTI4Counter = 0b0000;
-volatile int EXTI5Counter = 0b0000;
 volatile int EXTI4_5Counter = 0b0000;
 volatile int flag = 0;
 
-/**********************************************************************************************************************/
-/*
-void EXTI4_15_IRQHandler(void) {
-        if (EXTI->PR & EXTI_PR_PR4)
-        {
-                EXTI->PR |= EXTI_PR_PR4;
-                EXTI4Counter = ( EXTI4Counter + 1 ) & 15;
-        }
-}*/
 
-//	*** Use for 2 button sequence ***
-
-
-
+//       *** 2 Button Sequence Handler ***
+//      Sequence is button one twice, and button two three times	
 
 void EXTI4_15_IRQHandler(void){
-        if(EXTI->PR & EXTI_PR_PR4){
-                EXTI->PR |= EXTI_PR_PR4;
-                if(flag==0){
+        if(EXTI->PR & EXTI_PR_PR4){             // if the interrupt was from pin4 (button 1)
+
+                EXTI->PR |= EXTI_PR_PR4;        // this is like writing x = x | y 
+                                                // read PR and EXTI PR4, and assign the value from the OR back to PR, if  PR | PR4 evaluates to true, sets PR to 1, clears the flag
+                                                 
+                if(flag==0){                    // press B1 once, update sequence flag
                 	flag = 1;
                 }
-                else if(flag==1) {
+                else if(flag==1) {              // press B1 a second time, update sequence flag
                 	flag = 2;
                 }
-                else{
+                else{                           // otherwise reset sequence flag
                 	flag = 0;
                 }
         }
-        if(EXTI->PR & EXTI_PR_PR5){
-                EXTI->PR |= EXTI_PR_PR5;
-                if(flag==2){
-                       flag = 3;
+        if(EXTI->PR & EXTI_PR_PR5){             // if interrupt was from pin5 (button 2)
+                EXTI->PR |= EXTI_PR_PR5;        // clear the flag if true
+
+
+                if(flag==2){                    // if B1 has been pressed twice, and B2 pressed once, update sequence flag
+                       flag = 3;                
                 }
-                else if(flag==3){
+                else if(flag==3){               // if B2 pressed a second time, update sequence flag
                 	flag = 4;
                 }
-                else if(flag==4){
-                	  EXTI4_5Counter = (EXTI4_5Counter + 1) & 15;
-                	  flag = 0;
+                else if(flag==4){               // if B2 pressed a third time, sequence is complete
+
+                        EXTI4_5Counter = (EXTI4_5Counter + 1) & 15;   // increment the counter with bit wrapping
+                        flag = 0;                                     // reset sequence
                 }
         		else {
-        			flag = 0;
+        			flag = 0;                               // if incorrect input is given, reset sequence to beginning
         		}
         }
 }
@@ -90,6 +82,7 @@ void interrupt(void) {
         GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
         GPIO_Init(GPIOA, &GPIO_InitStructure);
 
+        /* Configure PA5 pin as input floating */
         GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
         GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
         GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
@@ -124,49 +117,28 @@ void interrupt(void) {
         NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
         NVIC_Init(&NVIC_InitStructure);
 
-   /*     while (1) {
-                if ((EXTI4Counter & 0b1000) != 0)
-                        GPIO_SetBits(GPIOA, GPIO_Pin_0);
-                else
-                        GPIO_ResetBits(GPIOA, GPIO_Pin_0);
 
-                if ((EXTI4Counter & 0b0100) != 0)
-                        GPIO_SetBits(GPIOA, GPIO_Pin_1);
-                else
-                        GPIO_ResetBits(GPIOA, GPIO_Pin_1);
-
-                if ((EXTI4Counter & 0b0010) != 0)
-                        GPIO_SetBits(GPIOA, GPIO_Pin_2);
-                else
-                        GPIO_ResetBits(GPIOA, GPIO_Pin_2);
-
-                if ((EXTI4Counter & 0b0001) != 0)
-                        GPIO_SetBits(GPIOA, GPIO_Pin_3);
-                else
-                        GPIO_ResetBits(GPIOA, GPIO_Pin_3);
-        } */
-
-//               *** Use for the 2 button sequence ***
+//               *** Loop to handle binary LED display  ***
                while (1) {
-                       if ((EXTI4_5Counter & 0b1000) != 0)
+                       if ((EXTI4_5Counter & 0b1000) != 0)        // if bit 3 is 1, turn PA0 on
                                GPIO_SetBits(GPIOA, GPIO_Pin_0);
                        else
-                               GPIO_ResetBits(GPIOA, GPIO_Pin_0);
+                               GPIO_ResetBits(GPIOA, GPIO_Pin_0); // if bit 3 is 0, turn PA0 off
 
-                       if ((EXTI4_5Counter & 0b0100) != 0)
+                       if ((EXTI4_5Counter & 0b0100) != 0)        // if bit 2 is 1, turn PA1 on
                                GPIO_SetBits(GPIOA, GPIO_Pin_1);
                        else
-                               GPIO_ResetBits(GPIOA, GPIO_Pin_1);
+                               GPIO_ResetBits(GPIOA, GPIO_Pin_1); // if bit 2 is 0, turn PA1 off
 
-                       if ((EXTI4_5Counter & 0b0010) != 0)
+                       if ((EXTI4_5Counter & 0b0010) != 0)        // if bit 1 is 1, turn PA2 on
                                GPIO_SetBits(GPIOA, GPIO_Pin_2);
                        else
-                               GPIO_ResetBits(GPIOA, GPIO_Pin_2);
+                               GPIO_ResetBits(GPIOA, GPIO_Pin_2); // if bit 1 is 0, turn PA2 off
 
-                       if ((EXTI4_5Counter & 0b0001) != 0)
+                       if ((EXTI4_5Counter & 0b0001) != 0)        // if bit 0 is 1, turn PA3 on
                                GPIO_SetBits(GPIOA, GPIO_Pin_3);
                        else
-                               GPIO_ResetBits(GPIOA, GPIO_Pin_3);
+                               GPIO_ResetBits(GPIOA, GPIO_Pin_3); // if bit 0 is 0, turn PA3 off
                }
 
 }
