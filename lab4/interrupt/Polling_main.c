@@ -138,9 +138,7 @@ int polling(void)
                 }
 
 
-
         }*/
-
 
         return 0;
 }
